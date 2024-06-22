@@ -14,6 +14,7 @@ import '@babylonjs/loaders/glTF';
 function App(): React.JSX.Element {
 
   const gltfURL = 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/BoxAnimated/glTF/BoxAnimated.gltf';
+  const horseGLTFURL = 'https://raw.githubusercontent.com/thechaudharysab/babylonjspoc/main/src/assets/Horse.gltf';
 
   const engine = useEngine();
   const [scene, setScene] = useState<Scene>();
@@ -21,7 +22,7 @@ function App(): React.JSX.Element {
 
   useEffect(() => {
     if (engine) {
-      SceneLoader.LoadAsync(gltfURL, undefined, engine).then((loadScene) => {
+      SceneLoader.LoadAsync(horseGLTFURL, undefined, engine).then((loadScene) => {
         if (loadScene) {
           setScene(loadScene);
           // console.log("loadScene: ", loadScene)
