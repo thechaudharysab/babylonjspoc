@@ -1,118 +1,61 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
-
-import React from 'react';
-import type {PropsWithChildren} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   SafeAreaView,
-  ScrollView,
   StatusBar,
   StyleSheet,
   Text,
-  useColorScheme,
   View,
 } from 'react-native';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
-
-function Section({children, title}: SectionProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-}
+import { useEngine, EngineView } from '@babylonjs/react-native';
+import { ArcRotateCamera, Camera, Scene, SceneLoader, Color4, Color3 } from "@babylonjs/core";
+import '@babylonjs/loaders/glTF';
 
 function App(): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
+  const gltfURL = 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/BoxAnimated/glTF/BoxAnimated.gltf';
+
+  const engine = useEngine();
+  const [scene, setScene] = useState<Scene>();
+  const [camera, setCamera] = useState<Camera>();
+
+  useEffect(() => {
+    if (engine) {
+      SceneLoader.LoadAsync(gltfURL, undefined, engine).then((loadScene) => {
+        if (loadScene) {
+          setScene(loadScene);
+          // console.log("loadScene: ", loadScene)
+          loadScene.createDefaultCameraOrLight(true, undefined, true);
+          (loadScene.activeCamera as ArcRotateCamera).alpha += Math.PI;
+          (loadScene.activeCamera as ArcRotateCamera).radius = 10;
+          (loadScene.activeCamera as ArcRotateCamera).pinchPrecision = 200;
+          setCamera(loadScene.activeCamera!);
+          loadScene.clearColor = new Color4(1, 1, 1, 1)
+          loadScene.ambientColor = new Color3(1, 1, 1)
+        } else {
+          console.error("Error loading loadScene.");
+        }
+      }).catch((error) => {
+        console.error("Error loading scene: ", error);
+      });
+    }
+  }, [engine]);
 
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+    // <SafeAreaView>
+    //   <Text>Open up App.tsx to start working on your app!</Text>
+    <View style={styles.container}>
+      <EngineView camera={camera} displayFrameRate={true} />
+    </View>
+    // </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
+  container: {
+    flex: 1,
+    backgroundColor: '#282c34',
+  }
 });
 
 export default App;
