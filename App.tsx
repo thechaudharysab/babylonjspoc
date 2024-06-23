@@ -14,7 +14,7 @@ function App(): React.JSX.Element {
 
   // const gltfURL = 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/BoxAnimated/glTF/BoxAnimated.gltf';
   const horseGLTFURL = 'https://raw.githubusercontent.com/thechaudharysab/babylonjspoc/main/src/assets/Horse.gltf';
-  const dancingManGLTFURL = 'https://raw.githubusercontent.com/thechaudharysab/babylonjspoc/main/src/assets/dancing_man.gltf';
+  const dancingManGLTFURL = 'https://raw.githubusercontent.com/thechaudharysab/babylonjspoc/main/src/assets/dancing_man/dancing_man.gltf';
 
   const engine = useEngine();
   const [scene, setScene] = useState<Scene>();
