@@ -14,14 +14,14 @@ function App(): React.JSX.Element {
 
   // const gltfURL = 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/BoxAnimated/glTF/BoxAnimated.gltf';
   const horseGLTFURL = 'https://raw.githubusercontent.com/thechaudharysab/babylonjspoc/main/src/assets/Horse.gltf';
-  const dancingManGLTFURL = 'https://raw.githubusercontent.com/thechaudharysab/babylonjspoc/main/src/assets/dancing_man/animated_man.gltf';
+  const walkingManGLTFURL = 'https://raw.githubusercontent.com/thechaudharysab/babylonjspoc/main/src/assets/dancing_man/animated_man.gltf';
 
   const engine = useEngine();
   const [scene, setScene] = useState<Scene>();
   const [camera, setCamera] = useState<Camera>();
 
-  const renderDancingMan = () => {
-    SceneLoader.LoadAsync(dancingManGLTFURL, undefined, engine).then((loadScene) => {
+  const renderWalkingMan = () => {
+    SceneLoader.LoadAsync(walkingManGLTFURL, undefined, engine).then((loadScene) => {
       if (loadScene) {
         setScene(loadScene);
         loadScene.createDefaultCameraOrLight(true, undefined, true);
@@ -30,40 +30,9 @@ function App(): React.JSX.Element {
         (loadScene.activeCamera as ArcRotateCamera).pinchPrecision = 200;
         setCamera(loadScene.activeCamera!);
 
-        // var idleAnimation = loadScene.getAnimationGroupByName("Idle");
-        // if (idleAnimation) {
-        //   // Adding true will loop the animation
-        //   idleAnimation.play(true);
-        // } else {
-        //   console.warn("Animation not found:", idleAnimation);
-        // }
-
-        // Some notes on animations
-        // const idleAnimationName = "Idle_2"
-        // const animationGroup = loadScene.animationGroups.find((group) => group.name === idleAnimationName);
-        // if (animationGroup) {
-        //   animationGroup.play();
-        // } else {
-        //   console.warn("Animation not found:", idleAnimationName);
-        // }
-        // loadScene.animationGroups.forEach((animationGroup) => {
-        //   console.log("Animation Name:", animationGroup.name);
-        /**
-         * LOG  Animation Name: Attack_Headbutt
-         * LOG  Animation Name: Attack_Kick
-         * LOG  Animation Name: Death
-         * LOG  Animation Name: Eating
-         * LOG  Animation Name: Gallop
-         * LOG  Animation Name: Gallop_Jump
-         * LOG  Animation Name: Idle
-         * LOG  Animation Name: Idle_2
-         * LOG  Animation Name: Idle_Headlow
-         * LOG  Animation Name: Idle_HitReact1
-         * LOG  Animation Name: Idle_HitReact2
-         * LOG  Animation Name: Jump_toIdle
-         * LOG  Animation Name: Walk
-         */
-        // });
+        loadScene.animationGroups.forEach((animationGroup) => {
+          console.log("Animation Name:", animationGroup.name);
+        });
       } else {
         console.error("Error loading loadScene.");
       }
@@ -127,7 +96,7 @@ function App(): React.JSX.Element {
   useEffect(() => {
     if (engine) {
       // renderHorse();
-      renderDancingMan();
+      renderWalkingMan();
     }
   }, [engine]);
 
