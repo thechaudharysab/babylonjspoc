@@ -7,21 +7,23 @@ import {
 } from 'react-native';
 
 import { useEngine, EngineView } from '@babylonjs/react-native';
-import { ArcRotateCamera, Camera, Scene, SceneLoader, Color4, Color3 } from "@babylonjs/core";
+import { ArcRotateCamera, Camera, Scene, SceneLoader, Color4, Color3, HemisphericLight, Vector3, MeshBuilder, StandardMaterial } from "@babylonjs/core";
 import '@babylonjs/loaders/glTF';
 
 function App(): React.JSX.Element {
 
   // const gltfURL = 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/BoxAnimated/glTF/BoxAnimated.gltf';
   const horseGLTFURL = 'https://raw.githubusercontent.com/thechaudharysab/babylonjspoc/main/src/assets/Horse.gltf';
-  const walkingManGLTFURL = 'https://raw.githubusercontent.com/thechaudharysab/babylonjspoc/main/src/assets/dancing_man/animated_man.gltf';
+  const walkingManGLTFURL = 'https://raw.githubusercontent.com/thechaudharysab/babylonjspoc/main/src/assets/walking_man/animated_man.gltf';
+  const dancingManGLTFURL = 'https://raw.githubusercontent.com/thechaudharysab/babylonjspoc/main/src/assets/dancing_man/dancing_man.gltf';
+  const droneGLTFURL = 'https://raw.githubusercontent.com/thechaudharysab/babylonjspoc/main/src/assets/drone/buster_drone.gltf';
 
   const engine = useEngine();
   const [scene, setScene] = useState<Scene>();
   const [camera, setCamera] = useState<Camera>();
 
   const renderWalkingMan = () => {
-    SceneLoader.LoadAsync(walkingManGLTFURL, undefined, engine).then((loadScene) => {
+    SceneLoader.LoadAsync(dancingManGLTFURL, undefined, engine).then((loadScene) => {
       if (loadScene) {
         setScene(loadScene);
         loadScene.createDefaultCameraOrLight(true, undefined, true);
@@ -93,10 +95,35 @@ function App(): React.JSX.Element {
     });
   };
 
+  const clyinderTest = () => {
+    // if (engine) {
+    const scene = new Scene(engine!);
+
+    const camera = new ArcRotateCamera('camera', Math.PI / 2, Math.PI / 2, 5, new Vector3(0, 0, 0), scene);
+    camera.attachControl(true);
+    setCamera(camera);
+
+    const light = new HemisphericLight('light', new Vector3(0, 1, 0), scene);
+    light.intensity = 0.7;
+
+    const cylinder = MeshBuilder.CreateCylinder('cylinder', { height: 1, diameter: 1 }, scene);
+
+    const shinyMaterial = new StandardMaterial('shiny', scene);
+    shinyMaterial.diffuseColor = new Color3(1, 0, 0); // Red color
+    shinyMaterial.specularColor = new Color3(1, 1, 1); // White color for shiny effect
+    shinyMaterial.specularPower = 64; // Increase the shine effect
+
+    cylinder.material = shinyMaterial;
+
+    setScene(scene);
+    // }
+  };
+
   useEffect(() => {
     if (engine) {
-      // renderHorse();
-      renderWalkingMan();
+      renderHorse();
+      // renderWalkingMan();
+      // clyinderTest();
     }
   }, [engine]);
 
