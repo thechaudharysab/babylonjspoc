@@ -7,24 +7,17 @@ import {
 } from 'react-native';
 
 import { useEngine, EngineView } from '@babylonjs/react-native';
-import { ArcRotateCamera, Camera, Scene, SceneLoader, Color4, AnimationGroup, Nullable } from "@babylonjs/core";
+import { ArcRotateCamera, Camera, Scene, SceneLoader, Color4, AnimationGroup, Nullable, HemisphericLight, Vector3 } from "@babylonjs/core";
 import '@babylonjs/loaders/glTF';
 
 // import { elevenlabs_API_KEY } from './src/constants';
 
 function App(): React.JSX.Element {
 
-  // const gltfURL = 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/BoxAnimated/glTF/BoxAnimated.gltf';
+  const basicGLTFURL = "https://raw.githubusercontent.com/thechaudharysab/babylonjspoc/main/src/assets/Client.gltf";
   const horseGLTFURL = 'https://raw.githubusercontent.com/thechaudharysab/babylonjspoc/main/src/assets/Horse.gltf';
+
   const walkingManGLTFURL = 'https://raw.githubusercontent.com/thechaudharysab/babylonjspoc/main/src/assets/walking_man/animated_man.gltf';
-  const dancingManGLTFURL = 'https://raw.githubusercontent.com/thechaudharysab/babylonjspoc/main/src/assets/dancing_man/dancing_man.gltf';
-  const droneGLTFURL = 'https://raw.githubusercontent.com/thechaudharysab/babylonjspoc/main/src/assets/drone/buster_drone.gltf';
-  const glbTest = 'https://github.com/thechaudharysab/babylonjspoc/raw/main/src/assets/Client.glb';
-
-  const Client = "https://github.com/ibjects/Pailo/raw/main/src/assets/glb3D/Client.glb";
-  const DwarfIdle = "https://github.com/ibjects/Pailo/raw/main/src/assets/glb3D/DwarfIdle.glb";
-
-  const ClientGLTF = "https://raw.githubusercontent.com/thechaudharysab/babylonjspoc/main/src/assets/Client.gltf";
 
   const engine = useEngine();
   const [scene, setScene] = useState<Scene>();
@@ -52,24 +45,24 @@ function App(): React.JSX.Element {
   //   });
   // };
 
-  // const renderClient = () => {
-  //   SceneLoader.LoadAsync(ClientGLTF, undefined, engine).then((loadScene) => {
-  //     if (loadScene) {
-  //       setScene(loadScene);
-  //       // Light
-  //       const light = new HemisphericLight("light", new Vector3(0, 1, 0), loadScene);
-  //       light.intensity = 0.7;
+  const renderClient = () => {
+    SceneLoader.LoadAsync(basicGLTFURL, undefined, engine).then((loadScene) => {
+      if (loadScene) {
+        setScene(loadScene);
+        // Light
+        const light = new HemisphericLight("light", new Vector3(0, 1, 0), loadScene);
+        light.intensity = 1.0;
 
-  //       // Camera
-  //       const camera = new ArcRotateCamera("camera", -Math.PI / 2, Math.PI / 2, -6, new Vector3(0, 2, 0), loadScene, true);
-  //       setCamera(camera);
-  //     } else {
-  //       console.error("Error loading loadScene.");
-  //     }
-  //   }).catch((error) => {
-  //     console.error("Error loading scene: ", error);
-  //   });
-  // };
+        // Camera
+        const camera = new ArcRotateCamera("camera", -Math.PI / 2, Math.PI / 2, -6, new Vector3(0, 2, 0), loadScene, true);
+        setCamera(camera);
+      } else {
+        console.error("Error loading loadScene.");
+      }
+    }).catch((error) => {
+      console.error("Error loading scene: ", error);
+    });
+  };
 
   // const clyinderTest = () => {
   //   // if (engine) {
@@ -164,7 +157,7 @@ function App(): React.JSX.Element {
 
   const renderTestCharacter = () => {
 
-    SceneLoader.LoadAsync(dancingManGLTFURL, undefined, engine).then((loadedScene) => {
+    SceneLoader.LoadAsync(walkingManGLTFURL, undefined, engine).then((loadedScene) => {
       if (loadedScene) {
         setScene(loadedScene);
 
@@ -190,8 +183,8 @@ function App(): React.JSX.Element {
 
   useEffect(() => {
     if (engine) {
-      renderTestCharacter();
-      // renderClient();
+      // renderTestCharacter();
+      renderClient();
       // renderHorseExperiments();
       // renderWalkingMan();
       // clyinderTest();
