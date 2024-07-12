@@ -2,7 +2,7 @@ This is a new [**React Native**](https://reactnative.dev) project, bootstrapped 
 
 # Tutorial Info
 
-Medium Link:
+Medium Link: https://medium.com/@ibjects/getting-started-with-babylonjs-in-a-react-native-mobile-app-ee1b82d67e03
 
 There are three examples in this tutorial:
 
